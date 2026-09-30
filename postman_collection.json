@@ -1,0 +1,98 @@
+{
+  "info": {
+    "name": "Handwritten Text & Audio Recognition API",
+    "description": "Collection covering the 3 endpoints: single recognition, recognition history, and batch recognition.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Single Recognition (Image/Audio Upload)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Image (PNG/JPG/JPEG/BMP/TIFF) or audio (MP3/M4A/WAV/FLAC) file, max 5MB."
+            },
+            {
+              "key": "model",
+              "type": "text",
+              "value": "paddleocr",
+              "description": "Image OCR model: 'paddleocr' or 'tesseract'. Ignored for audio."
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/recognition",
+          "host": ["{{base_url}}"],
+          "path": ["api", "recognition"]
+        },
+        "description": "Uploads a single image or audio file, runs the pre-processing + recognition + post-processing pipeline, stores the result in history, and returns it."
+      },
+      "response": []
+    },
+    {
+      "name": "2. History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/history",
+          "host": ["{{base_url}}"],
+          "path": ["api", "history"]
+        },
+        "description": "Returns all past recognitions stored locally, most recent first."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Batch Recognition",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "files",
+              "type": "file",
+              "src": [],
+              "description": "First file. Add more rows with key 'files' to upload multiple files."
+            },
+            {
+              "key": "files",
+              "type": "file",
+              "src": [],
+              "description": "Second file."
+            },
+            {
+              "key": "model",
+              "type": "text",
+              "value": "paddleocr",
+              "description": "Image OCR model applied to all image files in the batch: 'paddleocr' or 'tesseract'."
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/recognition/batch",
+          "host": ["{{base_url}}"],
+          "path": ["api", "recognition", "batch"]
+        },
+        "description": "Uploads multiple files, processes each independently, and returns processed/failed counts plus per-file results."
+      },
+      "response": []
+    }
+  ]
+}

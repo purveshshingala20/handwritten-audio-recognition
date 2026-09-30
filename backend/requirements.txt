@@ -1,0 +1,27 @@
+# --- Web framework ---
+Flask==3.0.3
+flask-cors==5.0.0
+python-dotenv==1.0.1
+
+# --- Image pre-processing (OpenCV) ---
+opencv-python-headless==4.10.0.84
+numpy==1.26.4
+Pillow==10.4.0
+
+# --- Image OCR engines ---
+paddlepaddle==2.6.2
+paddleocr==2.9.1
+pytesseract==0.3.13
+
+# --- Audio decoding / pre-processing ---
+av==13.1.0
+noisereduce==3.0.3
+
+# --- Voice Activity Detection ---
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.4.1
+torchaudio==2.4.1
+silero-vad==5.1.2
+
+# --- ASR (speech-to-text) ---
+faster-whisper==1.2.1

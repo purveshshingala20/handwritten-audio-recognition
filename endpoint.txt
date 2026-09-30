@@ -1,0 +1,109 @@
+HANDWRITTEN TEXT & AUDIO RECOGNITION API - ENDPOINTS
+=====================================================
+Base URL: http://localhost:8000
+
+(Also importable as postman_collection.json in this same folder.)
+
+
+1) SINGLE RECOGNITION
+----------------------
+Method : POST
+URL    : http://localhost:8000/api/recognition
+Body   : form-data
+  Key      | Type | Value
+  ---------|------|---------------------------------------------------
+  file     | File | Choose an image (PNG/JPG/JPEG/BMP/TIFF) or audio
+           |      | (MP3/M4A/WAV/FLAC) file. Max size: 5 MB.
+  model    | Text | "paddleocr" or "tesseract" (default: paddleocr)
+           |      | Only applies to image files; ignored for audio.
+
+Success Response (200):
+{
+  "id": 1,
+  "filename": "note.jpg",
+  "file_size": 84213,
+  "file_type": "image",
+  "model_used": "paddleocr",
+  "recognized_text": "Meeting notes for Monday...",
+  "confidence": 0.93,
+  "timestamp": "2026-09-28T10:15:32.123456+00:00"
+}
+
+Validation errors (400):
+- File not provided
+- Unsupported file extension (must be PNG, JPG, JPEG, BMP, TIFF, MP3, M4A, WAV, FLAC)
+- File larger than 5 MB
+- Invalid "model" value
+
+
+2) HISTORY
+----------
+Method : GET
+URL    : http://localhost:8000/api/history
+Body   : none
+
+Success Response (200):
+[
+  {
+    "id": 1,
+    "filename": "note.jpg",
+    "recognized_text": "Meeting notes for Monday...",
+    "confidence": 0.93,
+    "timestamp": "2026-09-28T10:15:32.123456+00:00"
+  }
+]
+
+
+3) BATCH RECOGNITION
+---------------------
+Method : POST
+URL    : http://localhost:8000/api/recognition/batch
+Body   : form-data
+  Key      | Type | Value
+  ---------|------|---------------------------------------------------
+  files    | File | Add this key MULTIPLE times, one per file, to
+           |      | upload two or more image/audio files.
+  model    | Text | "paddleocr" or "tesseract" (default: paddleocr)
+           |      | Applied to every image file in the batch.
+
+Success Response (200):
+{
+  "processed_count": 2,
+  "failed_count": 1,
+  "results": [
+    {
+      "id": 2,
+      "filename": "page1.png",
+      "file_size": 51230,
+      "file_type": "image",
+      "model_used": "paddleocr",
+      "recognized_text": "...",
+      "confidence": 0.91,
+      "timestamp": "2026-09-28T10:20:00.000000+00:00"
+    },
+    {
+      "id": 3,
+      "filename": "voice.wav",
+      "file_size": 302144,
+      "file_type": "audio",
+      "model_used": "faster-whisper",
+      "recognized_text": "...",
+      "confidence": 0.88,
+      "timestamp": "2026-09-28T10:20:04.000000+00:00"
+    }
+  ],
+  "failed": ["corrupted.jpg"]
+}
+
+
+HOW TO TEST IN POSTMAN
+-----------------------
+1. Start the backend first: cd backend && source venv/bin/activate && python run.py
+2. Open Postman, create a new request for each endpoint above (or import
+   postman_collection.json instead of typing these manually).
+3. For POST requests, set Body -> form-data, then add the keys/values shown
+   above. For file fields, change the field type dropdown from "Text" to
+   "File" and pick a file from disk.
+4. For endpoint 3, click "Add" under form-data and add another row with the
+   same key "files" for each additional file you want in the batch.
+5. Send the request and check the JSON response against the samples above.

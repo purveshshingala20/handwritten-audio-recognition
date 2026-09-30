@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Handwritten Text &amp; Audio Recognition</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Handwritten Text &amp; Audio Recognition</h1>
+    <p class="subtitle">Upload a handwritten image or an audio recording and get recognized text.</p>
+  </header>
+
+  <main>
+    <div class="api-config">
+      <label for="apiBaseUrl">API base URL</label>
+      <input type="text" id="apiBaseUrl" value="http://localhost:8000" />
+    </div>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="single">Single Recognition</button>
+      <button class="tab-btn" data-tab="batch">Batch Recognition</button>
+      <button class="tab-btn" data-tab="history">History</button>
+    </nav>
+
+    <!-- Single recognition -->
+    <section id="single" class="tab-panel active">
+      <h2>Recognize a single file</h2>
+      <form id="singleForm">
+        <div class="field">
+          <label for="singleFile">File (PNG, JPG, JPEG, BMP, TIFF, MP3, M4A, WAV, FLAC — max 5MB)</label>
+          <input type="file" id="singleFile" name="file" required />
+        </div>
+        <div class="field">
+          <label for="singleModel">Image recognition model</label>
+          <select id="singleModel" name="model">
+            <option value="paddleocr">PaddleOCR</option>
+            <option value="tesseract">Tesseract</option>
+          </select>
+          <p class="hint">Only applies to image files. Audio always uses the Whisper ASR model.</p>
+        </div>
+        <button type="submit">Recognize</button>
+      </form>
+      <div id="singleStatus" class="status"></div>
+      <pre id="singleResult" class="result"></pre>
+    </section>
+
+    <!-- Batch recognition -->
+    <section id="batch" class="tab-panel">
+      <h2>Recognize multiple files</h2>
+      <form id="batchForm">
+        <div class="field">
+          <label for="batchFiles">Files (select two or more)</label>
+          <input type="file" id="batchFiles" name="files" multiple required />
+        </div>
+        <div class="field">
+          <label for="batchModel">Image recognition model</label>
+          <select id="batchModel" name="model">
+            <option value="paddleocr">PaddleOCR</option>
+            <option value="tesseract">Tesseract</option>
+          </select>
+        </div>
+        <button type="submit">Recognize Batch</button>
+      </form>
+      <div id="batchStatus" class="status"></div>
+      <pre id="batchResult" class="result"></pre>
+    </section>
+
+    <!-- History -->
+    <section id="history" class="tab-panel">
+      <h2>Recognition history</h2>
+      <button id="refreshHistory">Refresh</button>
+      <div id="historyStatus" class="status"></div>
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Filename</th>
+            <th>Recognized Text</th>
+            <th>Confidence</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
